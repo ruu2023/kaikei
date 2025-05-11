@@ -451,16 +451,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document
             .getElementById("categoryForm")
             .addEventListener("submit", function (e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-
-                if (formData.get("categoryId")) {
-                    // 既存の科目を更新
-                    updateCategory(formData);
-                } else {
-                    // 新しい科目を追加
-                    addCategory(formData);
-                }
+                // e.preventDefault();
+                // const formData = new FormData(this);
+                // if (formData.get("categoryId")) {
+                //     // 既存の科目を更新
+                //     updateCategory(formData);
+                // } else {
+                //     // 新しい科目を追加
+                //     addCategory(formData);
+                // }
             });
 
         // 科目削除ボタン

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -28,6 +29,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        // Log::debug('sotre start', $request->all()); // デバッグ用
         $validated = $request -> validate ([
             'name' => 'required|string|max:255',
             'icon' => 'nullable|string|max:255',

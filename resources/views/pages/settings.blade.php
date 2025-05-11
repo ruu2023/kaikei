@@ -433,13 +433,26 @@
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
-                        <form id="categoryForm">
+                        <form method="POST" id="categoryForm" action="/categories">
+                            @csrf
                             <input type="hidden" id="categoryId" name="categoryId">
                             <input type="hidden" id="categoryType" name="categoryType">
 
                             <div class="form-group">
                                 <label for="categoryName">科目名</label>
-                                <input type="text" id="categoryName" name="categoryName" required>
+                                <input type="text" id="categoryName" name="name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="transactionType">収支区分</label>
+                                <div class="transaction-type-toggle">
+                                    <input type="radio" id="income" name="default_type" value="income"
+                                        required />
+                                    <label for="income" class="toggle-label income">収入</label>
+                                    <input type="radio" id="expense" name="default_type" value="expense"
+                                        required />
+                                    <label for="expense" class="toggle-label expense">支出</label>
+                                </div>
                             </div>
 
                             <div class="form-group">
