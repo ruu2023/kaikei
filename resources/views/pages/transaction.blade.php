@@ -26,8 +26,8 @@
 
                         <div class="form-group">
                             <label for="transactionSource">取引元</label>
-                            <input type="text" id="transactionSource" name="client_id" placeholder="例：○○銀行、○○クライアント"
-                                required />
+                            <input type="text" id="transactionSource" name="client_name"
+                                placeholder="例：○○銀行、○○クライアント" required />
                         </div>
 
                         <div class="form-group">
@@ -63,6 +63,32 @@
                                 <input type="radio" id="expense" name="type" value="expense" required />
                                 <label for="expense" class="toggle-label expense">支出</label>
                             </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="transactionCategory">相手方</label>
+                            <select id="transactionCategory" name="payment_method_id" required>
+                                <option value="" disabled selected>相手方を選択してください</option>
+                                <optgroup label="収入">
+                                    <option value="1">現金</option>
+                                    <option value="consulting">銀行振込</option>
+                                    <option value="interest">利息</option>
+                                    <option value="other_income">その他収入</option>
+                                </optgroup>
+                                <optgroup label="支出">
+                                    <option value="office">銀行振込</option>
+                                    <option value="salary">給与</option>
+                                    <option value="rent">賃料</option>
+                                    <option value="utilities">光熱費</option>
+                                    <option value="transportation">交通費</option>
+                                    <option value="meals">飲食費</option>
+                                    <option value="marketing">マーケティング</option>
+                                    <option value="equipment">機器・設備</option>
+                                    <option value="tax">税金</option>
+                                    <option value="other_expense">その他支出</option>
+                                </optgroup>
+                            </select>
                         </div>
 
                         <div class="form-group">
