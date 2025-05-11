@@ -23,21 +23,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // フォームの送信処理
     transactionForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        // フォームデータの取得
-        const formData = new FormData(transactionForm);
-        const transactionData = {
-            date: formData.get("transactionDate"),
-            source: formData.get("transactionSource"),
-            category: formData.get("transactionCategory"),
-            type: formData.get("transactionType"),
-            amount: parseFloat(formData.get("transactionAmount")),
-            memo: formData.get("transactionMemo"),
-        };
-
-        // 実際のアプリケーションではここでデータを保存
-        saveTransaction(transactionData);
+        // event.preventDefault();
+        // // フォームデータの取得
+        // const formData = new FormData(transactionForm);
+        // const transactionData = {
+        //     date: formData.get("transactionDate"),
+        //     source: formData.get("transactionSource"),
+        //     category: formData.get("transactionCategory"),
+        //     type: formData.get("transactionType"),
+        //     amount: parseFloat(formData.get("transactionAmount")),
+        //     memo: formData.get("transactionMemo"),
+        // };
+        // // 実際のアプリケーションではここでデータを保存
+        // saveTransaction(transactionData);
     });
 
     /**

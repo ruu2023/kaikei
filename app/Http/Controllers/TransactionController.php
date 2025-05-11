@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -40,7 +41,6 @@ class TransactionController extends Controller
             'payment_method_id' => 'nullable|exists:payment_methods,id',
             'client_id' => 'nullable|exists:clients,id',
         ]);
-
         $validated['user_id'] = Auth::id();
 
         $transaction = Transaction::create($validated);

@@ -17,24 +17,25 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- 取引フォーム -->
                 <section class="transaction-form-section">
-                    <form id="transactionForm">
+                    <form method="POST" id="transactionForm" action="/transaction">
+                        @csrf
                         <div class="form-group">
                             <label for="transactionDate">日付</label>
-                            <input type="date" id="transactionDate" name="transactionDate" required />
+                            <input type="date" id="transactionDate" name="date" required />
                         </div>
 
                         <div class="form-group">
                             <label for="transactionSource">取引元</label>
-                            <input type="text" id="transactionSource" name="transactionSource"
-                                placeholder="例：○○銀行、○○クライアント" required />
+                            <input type="text" id="transactionSource" name="client_id" placeholder="例：○○銀行、○○クライアント"
+                                required />
                         </div>
 
                         <div class="form-group">
                             <label for="transactionCategory">科目</label>
-                            <select id="transactionCategory" name="transactionCategory" required>
+                            <select id="transactionCategory" name="category_id" required>
                                 <option value="" disabled selected>科目を選択してください</option>
                                 <optgroup label="収入">
-                                    <option value="sales">売上</option>
+                                    <option value="1">売上</option>
                                     <option value="consulting">コンサルティング</option>
                                     <option value="interest">利息</option>
                                     <option value="other_income">その他収入</option>
@@ -57,9 +58,9 @@
                         <div class="form-group">
                             <label for="transactionType">収支区分</label>
                             <div class="transaction-type-toggle">
-                                <input type="radio" id="income" name="transactionType" value="income" required />
+                                <input type="radio" id="income" name="type" value="income" required />
                                 <label for="income" class="toggle-label income">収入</label>
-                                <input type="radio" id="expense" name="transactionType" value="expense" required />
+                                <input type="radio" id="expense" name="type" value="expense" required />
                                 <label for="expense" class="toggle-label expense">支出</label>
                             </div>
                         </div>
@@ -68,14 +69,14 @@
                             <label for="transactionAmount">金額</label>
                             <div class="amount-input-wrapper">
                                 <span class="currency-symbol">¥</span>
-                                <input type="number" id="transactionAmount" name="transactionAmount" placeholder="0"
+                                <input type="number" id="transactionAmount" name="amount" placeholder="0"
                                     min="0" required />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="transactionMemo">メモ</label>
-                            <textarea id="transactionMemo" name="transactionMemo" placeholder="取引に関するメモ"></textarea>
+                            <textarea id="transactionMemo" name="memo" placeholder="取引に関するメモ"></textarea>
                         </div>
 
                         <button type="submit" class="submit-button">

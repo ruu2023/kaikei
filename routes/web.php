@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
     // client
     Route::post('clients', [ClientController::class, 'store']);
     Route::delete('clients/{client}', [ClientController::class, 'destroy']);
+
+    // transaction
+    Route::post('transaction', [TransactionController::class, 'store']);
+    Route::delete('transaction/{transaction}', [TransactionController::class, 'destroy']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
