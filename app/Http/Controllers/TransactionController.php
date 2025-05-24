@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -31,6 +32,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        // Log::debug('store start', $request->all()); // デバッグ用
         $validated = $request->validate([
             'date' => 'required|date',
             'amount' => 'required|integer|min:0',
@@ -39,13 +41,15 @@ class TransactionController extends Controller
             'category_id' => 'required|exists:categories,id',
             'payment_method_id' => 'nullable|exists:payment_methods,id',
             'client_id' => 'nullable|exists:clients,id',
+            'client_name' => 'nullable|string|max:255',
         ]);
-
+        // Log::debug('validate ok', $validated); // デバッグ用
         $validated['user_id'] = Auth::id();
 
         $transaction = Transaction::create($validated);
 
-        return response()->json($transaction, 201);
+        // return response()->json($transaction, 201);
+        return back();
     }
 
     /**
@@ -80,6 +84,7 @@ class TransactionController extends Controller
         $this->authorize('delete', $transaction);
         $transaction->delete();
 
-        return response()->json(['message' => 'Deleted'], 200);
+        // return response()->json(['message' => 'Deleted'], 200);
+        return back();
     }
 }

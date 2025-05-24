@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between pr-4">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('取引登録 - 会計管理ダッシュボード') }}
+                {{ __('取引登録') }}
             </h2>
             <a href="{{ route('dashboard') }}" class="icon-button" id="closeBtn">
                 <i class="fas fa-times"></i>
@@ -17,39 +17,36 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- 取引フォーム -->
                 <section class="transaction-form-section">
-                    <form id="transactionForm">
+                    <form method="POST" id="transactionForm" action="/transaction">
+                        @csrf
                         <div class="form-group">
                             <label for="transactionDate">日付</label>
-                            <input type="date" id="transactionDate" name="transactionDate" required />
+                            <input type="date" id="transactionDate" name="date" required />
                         </div>
 
                         <div class="form-group">
                             <label for="transactionSource">取引元</label>
-                            <input type="text" id="transactionSource" name="transactionSource"
+                            <input type="text" id="transactionSource" name="client_name"
                                 placeholder="例：○○銀行、○○クライアント" required />
                         </div>
 
                         <div class="form-group">
                             <label for="transactionCategory">科目</label>
-                            <select id="transactionCategory" name="transactionCategory" required>
+                            <select id="transactionCategory" name="category_id" required>
                                 <option value="" disabled selected>科目を選択してください</option>
                                 <optgroup label="収入">
-                                    <option value="sales">売上</option>
-                                    <option value="consulting">コンサルティング</option>
-                                    <option value="interest">利息</option>
-                                    <option value="other_income">その他収入</option>
+                                    @foreach ($category as $item)
+                                        @if ($item->default_type === 'income')
+                                            <option value={{ $item->id }}>{{ $item->name }}</option>
+                                        @endif
+                                    @endforeach
                                 </optgroup>
                                 <optgroup label="支出">
-                                    <option value="office">オフィス経費</option>
-                                    <option value="salary">給与</option>
-                                    <option value="rent">賃料</option>
-                                    <option value="utilities">光熱費</option>
-                                    <option value="transportation">交通費</option>
-                                    <option value="meals">飲食費</option>
-                                    <option value="marketing">マーケティング</option>
-                                    <option value="equipment">機器・設備</option>
-                                    <option value="tax">税金</option>
-                                    <option value="other_expense">その他支出</option>
+                                    @foreach ($category as $item)
+                                        @if ($item->default_type === 'expense')
+                                            <option value={{ $item->id }}>{{ $item->name }}</option>
+                                        @endif
+                                    @endforeach
                                 </optgroup>
                             </select>
                         </div>
@@ -57,25 +54,47 @@
                         <div class="form-group">
                             <label for="transactionType">収支区分</label>
                             <div class="transaction-type-toggle">
-                                <input type="radio" id="income" name="transactionType" value="income" required />
+                                <input type="radio" id="income" name="type" value="income" required />
                                 <label for="income" class="toggle-label income">収入</label>
-                                <input type="radio" id="expense" name="transactionType" value="expense" required />
+                                <input type="radio" id="expense" name="type" value="expense" required />
                                 <label for="expense" class="toggle-label expense">支出</label>
                             </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="transactionCategory">相手方</label>
+                            <select id="transactionCategory" name="payment_method_id" required>
+                                <option value="" class="paymentMethod" disabled selected>相手方を選択してください</option>
+                                @foreach ($paymentMethod as $item)
+                                    @if ($item->type === 'income')
+                                        <option class="paymentMethodIncome" style="display:none;"
+                                            value={{ $item->id }}>
+                                            {{ $item->name }}</option>
+                                    @endif
+                                @endforeach
+                                @foreach ($paymentMethod as $item)
+                                    @if ($item->type === 'expense')
+                                        <option class="paymentMethodExpense" style="display:none;"
+                                            value={{ $item->id }}>
+                                            {{ $item->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="form-group">
                             <label for="transactionAmount">金額</label>
                             <div class="amount-input-wrapper">
                                 <span class="currency-symbol">¥</span>
-                                <input type="number" id="transactionAmount" name="transactionAmount" placeholder="0"
+                                <input type="number" id="transactionAmount" name="amount" placeholder="0"
                                     min="0" required />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="transactionMemo">メモ</label>
-                            <textarea id="transactionMemo" name="transactionMemo" placeholder="取引に関するメモ"></textarea>
+                            <textarea id="transactionMemo" name="memo" placeholder="取引に関するメモ"></textarea>
                         </div>
 
                         <button type="submit" class="submit-button">

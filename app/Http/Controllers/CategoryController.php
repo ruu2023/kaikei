@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -26,20 +28,17 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $validated = $request -> validate ([
-            'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:255',
-            'default_type' => 'required|in:income,expense',
-            'sort_order' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
 
         $validated['created_at'] = now();
 
         $category = Category::create($validated);
 
-        return response()->json($category, 201);
+        // return response()->json($category, 201);
+
+        return back();
     }
 
     /**
@@ -61,9 +60,19 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        //
+
+        $validated = $request->validated();
+
+        $category->update($validated);
+
+        // return response()->json([
+        //     'message' => 'カテゴリーを更新しました。',
+        //     'category' => $category
+        // ]);
+
+        return back();
     }
 
     /**
@@ -73,6 +82,8 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return response()->json(['message', 'Deleted'], 200);
+        // return response()->json(['message', 'Deleted'], 200);
+
+        return back();
     }
 }

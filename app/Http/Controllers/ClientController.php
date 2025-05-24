@@ -37,7 +37,9 @@ class ClientController extends Controller
 
         $client = Client::create($validated);
 
-        return response()->json($client, 201);
+        // return response()->json($client, 201);
+
+        return back();
     }
 
     /**
@@ -71,6 +73,8 @@ class ClientController extends Controller
     {
         $client->delete();
 
-        return response()->json(['message', 'Deleted'], 200);
+        // return response()->json(['message', 'Deleted'], 200);
+
+        return back();
     }
 }

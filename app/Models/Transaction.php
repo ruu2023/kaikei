@@ -13,11 +13,12 @@ class Transaction extends Model
         'date',
         'amount',
         'type',
-        'momo',
+        'memo',
         'category_id',
         'user_id',
-        'pyament_method"id',
+        'payment_method_id',
         'client_id',
+        'client_name',
     ];
 
     // リレーション

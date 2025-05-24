@@ -38,7 +38,8 @@ class PaymentMethodController extends Controller
 
         $paymentMethod = PaymentMethod::create($validated);
 
-        return response()->json($paymentMethod, 201);
+        // return response()->json($paymentMethod, 201);
+        return back();
     }
 
     /**
@@ -72,6 +73,7 @@ class PaymentMethodController extends Controller
     {
         $paymentMethod->delete();
 
-        return response()->json(['message', 'Deleted'], 200);
+        // return response()->json(['message', 'Deleted'], 200);
+        return back();
     }
 }

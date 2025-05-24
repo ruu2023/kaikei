@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\PaymentMethod;
+
 class AppController extends Controller
 {
     public function dashboard()
@@ -11,7 +14,9 @@ class AppController extends Controller
 
     public function transaction()
     {
-        return view('pages.transaction');
+        $category = Category::all();
+        $paymentMethod = PaymentMethod::all();
+        return view('pages.transaction', compact('category', 'paymentMethod'));
     }
 
     public function analytics()
@@ -21,6 +26,7 @@ class AppController extends Controller
 
     public function settings()
     {
-        return view('pages.settings');
+        $category = Category::all();
+        return view('pages.settings', compact('category'));
     }
 }

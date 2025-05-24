@@ -16,28 +16,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (optgroupLabel === "収入") {
             document.getElementById("income").checked = true;
+            document
+                .getElementById("income")
+                .dispatchEvent(new Event("change"));
         } else if (optgroupLabel === "支出") {
             document.getElementById("expense").checked = true;
+            document
+                .getElementById("expense")
+                .dispatchEvent(new Event("change"));
         }
+    });
+
+    // 相手方を表示
+    document.getElementById("income").addEventListener("change", () => {
+        document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
+            item.style.display = "block";
+        });
+        document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
+            item.style.display = "none";
+        });
+    });
+    document.getElementById("expense").addEventListener("change", () => {
+        document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
+            item.style.display = "none";
+        });
+        document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
+            item.style.display = "block";
+        });
     });
 
     // フォームの送信処理
     transactionForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        // フォームデータの取得
-        const formData = new FormData(transactionForm);
-        const transactionData = {
-            date: formData.get("transactionDate"),
-            source: formData.get("transactionSource"),
-            category: formData.get("transactionCategory"),
-            type: formData.get("transactionType"),
-            amount: parseFloat(formData.get("transactionAmount")),
-            memo: formData.get("transactionMemo"),
-        };
-
-        // 実際のアプリケーションではここでデータを保存
-        saveTransaction(transactionData);
+        // event.preventDefault();
+        // // フォームデータの取得
+        // const formData = new FormData(transactionForm);
+        // const transactionData = {
+        //     date: formData.get("transactionDate"),
+        //     source: formData.get("transactionSource"),
+        //     category: formData.get("transactionCategory"),
+        //     type: formData.get("transactionType"),
+        //     amount: parseFloat(formData.get("transactionAmount")),
+        //     memo: formData.get("transactionMemo"),
+        // };
+        // // 実際のアプリケーションではここでデータを保存
+        // saveTransaction(transactionData);
     });
 
     /**
