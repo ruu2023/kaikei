@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -27,15 +28,9 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        // Log::debug('sotre start', $request->all()); // デバッグ用
-        $validated = $request -> validate ([
-            'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:255',
-            'default_type' => 'required|in:income,expense',
-            'sort_order' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
 
         $validated['created_at'] = now();
 
@@ -65,18 +60,13 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $validated = $request -> validate ([
-            'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:255',
-            'default_type' => 'required|in:income,expense',
-            'sort_order' => 'nullable|integer',
-        ]);
+
+        $validated = $request->validated();
 
         $category->update($validated);
 
-        // 成功レスポンス
         // return response()->json([
         //     'message' => 'カテゴリーを更新しました。',
         //     'category' => $category

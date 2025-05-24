@@ -48,7 +48,8 @@ class TransactionController extends Controller
 
         $transaction = Transaction::create($validated);
 
-        return response()->json($transaction, 201);
+        // return response()->json($transaction, 201);
+        return back();
     }
 
     /**
@@ -83,6 +84,7 @@ class TransactionController extends Controller
         $this->authorize('delete', $transaction);
         $transaction->delete();
 
-        return response()->json(['message' => 'Deleted'], 200);
+        // return response()->json(['message' => 'Deleted'], 200);
+        return back();
     }
 }
