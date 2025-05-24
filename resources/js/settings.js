@@ -1,26 +1,37 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("ここ");
+    const categoryObj = document
+        .getElementById("category-list")
+        .getAttribute("data-category");
+    const category = JSON.parse(categoryObj);
+    const categoryData = category.reduce((acc, item) => {
+        if (!acc[item.default_type]) {
+            acc[item.default_type] = [];
+        }
+        acc[item.default_type].push(item);
+        return acc;
+    }, {});
+    // console.log(category, categoryItems);
     // 科目データ（モック）
-    const categoryData = {
-        income: [
-            { id: "inc1", name: "売上", icon: "fas fa-coins" },
-            { id: "inc2", name: "コンサルティング", icon: "fas fa-briefcase" },
-            { id: "inc3", name: "利息", icon: "fas fa-piggy-bank" },
-            { id: "inc4", name: "その他収入", icon: "fas fa-hand-holding-usd" },
-        ],
-        expense: [
-            { id: "exp1", name: "オフィス経費", icon: "fas fa-paperclip" },
-            { id: "exp2", name: "給与", icon: "fas fa-user-tie" },
-            { id: "exp3", name: "賃料", icon: "fas fa-building" },
-            { id: "exp4", name: "光熱費", icon: "fas fa-bolt" },
-            { id: "exp5", name: "交通費", icon: "fas fa-train" },
-            { id: "exp6", name: "飲食費", icon: "fas fa-utensils" },
-            { id: "exp7", name: "マーケティング", icon: "fas fa-bullhorn" },
-            { id: "exp8", name: "機器・設備", icon: "fas fa-laptop" },
-            { id: "exp9", name: "税金", icon: "fas fa-file-invoice-dollar" },
-            { id: "exp10", name: "その他支出", icon: "fas fa-receipt" },
-        ],
-    };
+    // const categoryData = {
+    //     income: [
+    //         { id: "inc1", name: "売上", icon: "fas fa-coins" },
+    //         { id: "inc2", name: "コンサルティング", icon: "fas fa-briefcase" },
+    //         { id: "inc3", name: "利息", icon: "fas fa-piggy-bank" },
+    //         { id: "inc4", name: "その他収入", icon: "fas fa-hand-holding-usd" },
+    //     ],
+    //     expense: [
+    //         { id: "exp1", name: "オフィス経費", icon: "fas fa-paperclip" },
+    //         { id: "exp2", name: "給与", icon: "fas fa-user-tie" },
+    //         { id: "exp3", name: "賃料", icon: "fas fa-building" },
+    //         { id: "exp4", name: "光熱費", icon: "fas fa-bolt" },
+    //         { id: "exp5", name: "交通費", icon: "fas fa-train" },
+    //         { id: "exp6", name: "飲食費", icon: "fas fa-utensils" },
+    //         { id: "exp7", name: "マーケティング", icon: "fas fa-bullhorn" },
+    //         { id: "exp8", name: "機器・設備", icon: "fas fa-laptop" },
+    //         { id: "exp9", name: "税金", icon: "fas fa-file-invoice-dollar" },
+    //         { id: "exp10", name: "その他支出", icon: "fas fa-receipt" },
+    //     ],
+    // };
 
     // グローバル変数
     let currentCategoryId = null;
@@ -479,6 +490,8 @@ document.addEventListener("DOMContentLoaded", function () {
             option.addEventListener("click", function () {
                 const iconClass = this.dataset.icon;
                 selectedIconValue = iconClass;
+
+                // document.getElementById();
 
                 // 選択中のアイコンを更新
                 updateSelectedIcon(iconClass);

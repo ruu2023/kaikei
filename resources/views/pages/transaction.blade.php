@@ -35,22 +35,18 @@
                             <select id="transactionCategory" name="category_id" required>
                                 <option value="" disabled selected>科目を選択してください</option>
                                 <optgroup label="収入">
-                                    <option value="1">売上</option>
-                                    <option value="consulting">コンサルティング</option>
-                                    <option value="interest">利息</option>
-                                    <option value="other_income">その他収入</option>
+                                    @foreach ($category as $item)
+                                        @if ($item->default_type === 'income')
+                                            <option value={{ $item->id }}>{{ $item->name }}</option>
+                                        @endif
+                                    @endforeach
                                 </optgroup>
                                 <optgroup label="支出">
-                                    <option value="office">オフィス経費</option>
-                                    <option value="salary">給与</option>
-                                    <option value="rent">賃料</option>
-                                    <option value="utilities">光熱費</option>
-                                    <option value="transportation">交通費</option>
-                                    <option value="meals">飲食費</option>
-                                    <option value="marketing">マーケティング</option>
-                                    <option value="equipment">機器・設備</option>
-                                    <option value="tax">税金</option>
-                                    <option value="other_expense">その他支出</option>
+                                    @foreach ($category as $item)
+                                        @if ($item->default_type === 'expense')
+                                            <option value={{ $item->id }}>{{ $item->name }}</option>
+                                        @endif
+                                    @endforeach
                                 </optgroup>
                             </select>
                         </div>
@@ -69,25 +65,21 @@
                         <div class="form-group">
                             <label for="transactionCategory">相手方</label>
                             <select id="transactionCategory" name="payment_method_id" required>
-                                <option value="" disabled selected>相手方を選択してください</option>
-                                <optgroup label="収入">
-                                    <option value="1">現金</option>
-                                    <option value="consulting">銀行振込</option>
-                                    <option value="interest">利息</option>
-                                    <option value="other_income">その他収入</option>
-                                </optgroup>
-                                <optgroup label="支出">
-                                    <option value="office">銀行振込</option>
-                                    <option value="salary">給与</option>
-                                    <option value="rent">賃料</option>
-                                    <option value="utilities">光熱費</option>
-                                    <option value="transportation">交通費</option>
-                                    <option value="meals">飲食費</option>
-                                    <option value="marketing">マーケティング</option>
-                                    <option value="equipment">機器・設備</option>
-                                    <option value="tax">税金</option>
-                                    <option value="other_expense">その他支出</option>
-                                </optgroup>
+                                <option value="" class="paymentMethod" disabled selected>相手方を選択してください</option>
+                                @foreach ($paymentMethod as $item)
+                                    @if ($item->type === 'income')
+                                        <option class="paymentMethodIncome" style="display:none;"
+                                            value={{ $item->id }}>
+                                            {{ $item->name }}</option>
+                                    @endif
+                                @endforeach
+                                @foreach ($paymentMethod as $item)
+                                    @if ($item->type === 'expense')
+                                        <option class="paymentMethodExpense" style="display:none;"
+                                            value={{ $item->id }}>
+                                            {{ $item->name }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
 

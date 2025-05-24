@@ -16,9 +16,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (optgroupLabel === "収入") {
             document.getElementById("income").checked = true;
+            document
+                .getElementById("income")
+                .dispatchEvent(new Event("change"));
         } else if (optgroupLabel === "支出") {
             document.getElementById("expense").checked = true;
+            document
+                .getElementById("expense")
+                .dispatchEvent(new Event("change"));
         }
+    });
+
+    // 相手方を表示
+    document.getElementById("income").addEventListener("change", () => {
+        document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
+            item.style.display = "block";
+        });
+        document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
+            item.style.display = "none";
+        });
+    });
+    document.getElementById("expense").addEventListener("change", () => {
+        document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
+            item.style.display = "none";
+        });
+        document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
+            item.style.display = "block";
+        });
     });
 
     // フォームの送信処理
