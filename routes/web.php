@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
 
     // category
     Route::post('categories', [CategoryController::class, 'store']);
+    Route::patch('categories/{category}', [CategoryController::class, 'update']);
     Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
 
     // paymentMethod

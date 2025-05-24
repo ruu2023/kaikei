@@ -41,7 +41,9 @@ class CategoryController extends Controller
 
         $category = Category::create($validated);
 
-        return response()->json($category, 201);
+        // return response()->json($category, 201);
+
+        return back();
     }
 
     /**
@@ -65,7 +67,22 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $validated = $request -> validate ([
+            'name' => 'required|string|max:255',
+            'icon' => 'nullable|string|max:255',
+            'default_type' => 'required|in:income,expense',
+            'sort_order' => 'nullable|integer',
+        ]);
+
+        $category->update($validated);
+
+        // 成功レスポンス
+        // return response()->json([
+        //     'message' => 'カテゴリーを更新しました。',
+        //     'category' => $category
+        // ]);
+
+        return back();
     }
 
     /**
@@ -75,6 +92,8 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return response()->json(['message', 'Deleted'], 200);
+        // return response()->json(['message', 'Deleted'], 200);
+
+        return back();
     }
 }

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between pr-4">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('取引登録 - 会計管理ダッシュボード') }}
+                {{ __('取引登録') }}
             </h2>
             <a href="{{ route('dashboard') }}" class="icon-button" id="closeBtn">
                 <i class="fas fa-times"></i>

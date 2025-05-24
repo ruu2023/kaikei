@@ -187,6 +187,7 @@
                         </div>
                         <form method="POST" id="categoryForm" action="/categories">
                             @csrf
+                            <input type="hidden" name="_method" value="PATCH" id="methodInput">
                             <input type="hidden" id="categoryId" name="categoryId">
                             <input type="hidden" id="categoryType" name="categoryType">
 
@@ -321,14 +322,16 @@
                                 この科目に関連付けられた取引はすべて「その他」に再分類されます。
                             </p>
                         </div>
-                        <div class="form-actions">
+                        <form class="form-actions" method="POST" id="categoryDeleteForm" action="/categories">
+                            @csrf
+                            @method('DELETE')
                             <button class="secondary-button close-modal">
                                 キャンセル
                             </button>
                             <button class="danger-button" id="confirmDeleteCategoryBtn">
                                 <i class="fas fa-trash"></i> 削除する
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
