@@ -468,24 +468,7 @@
                     </li>
                 @empty
                     <li class="transaction-item">
-                        <div class="transaction-icon expense">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">オフィス用品</div>
-                            <div class="transaction-date">{{ now()->format('n月j日') }}</div>
-                        </div>
-                        <div class="transaction-amount expense">-¥12,500</div>
-                    </li>
-                    <li class="transaction-item">
-                        <div class="transaction-icon income">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                        </div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">クライアントA 請求書#42</div>
-                            <div class="transaction-date">{{ now()->subDays(2)->format('n月j日') }}</div>
-                        </div>
-                        <div class="transaction-amount income">+¥150,000</div>
+                        表示するアイテムがありません。
                     </li>
                 @endforelse
             </ul>

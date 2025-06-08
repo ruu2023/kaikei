@@ -8,6 +8,29 @@ document.addEventListener("DOMContentLoaded", function () {
   const formattedDate = today.toISOString().split("T")[0]; // YYYY-MM-DD形式
   dateInput.value = formattedDate;
 
+  /**
+   * 相手方の表示（収入）
+   */
+  function showPaymentIncome() {
+    document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
+      item.style.display = "block";
+    });
+    document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
+      item.style.display = "none";
+    });
+  }
+  /**
+   * 相手方の表示（支出）
+   */
+  function showPaymentExpense() {
+    document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
+      item.style.display = "none";
+    });
+    document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
+      item.style.display = "block";
+    });
+  }
+
   // 科目が変更されたときに収支区分を自動選択
   const categorySelect = document.getElementById("transactionCategory");
   categorySelect.addEventListener("change", function () {
@@ -25,20 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 相手方を表示
   document.getElementById("income").addEventListener("change", () => {
-    document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
-      item.style.display = "block";
-    });
-    document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
-      item.style.display = "none";
-    });
+    showPaymentIncome();
   });
   document.getElementById("expense").addEventListener("change", () => {
-    document.querySelectorAll(".paymentMethodIncome").forEach((item) => {
-      item.style.display = "none";
-    });
-    document.querySelectorAll(".paymentMethodExpense").forEach((item) => {
-      item.style.display = "block";
-    });
+    showPaymentExpense();
   });
 
   /**
