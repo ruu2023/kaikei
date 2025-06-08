@@ -217,9 +217,10 @@ class AppController extends Controller
         ));
     }
 
-    public function settings()
+    public function settings(Request $request)
     {
         $category = Category::all();
-        return view('pages.settings', compact('category'));
+        $page = $request->query("page");
+        return view('pages.settings', compact('category', 'page'));
     }
 }

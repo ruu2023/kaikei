@@ -34,11 +34,13 @@ class CategoryController extends Controller
 
         $validated['created_at'] = now();
 
+        $maxSort = Category::max('sort_order') ?? 0;
+        $validated['sort_order'] = $maxSort + 1;
         $category = Category::create($validated);
 
         // return response()->json($category, 201);
 
-        return back();
+        return redirect("/settings?page=category");
     }
 
     /**
@@ -72,7 +74,7 @@ class CategoryController extends Controller
         //     'category' => $category
         // ]);
 
-        return back();
+        return redirect("/settings?page=category");
     }
 
     /**
