@@ -33,7 +33,7 @@ class ClientController extends Controller
             'name' => 'required|string|max:255'
         ]);
 
-        $validate['user_id'] = Auth::id();
+        $validated['user_id'] = Auth::id();
 
         $client = Client::create($validated);
 

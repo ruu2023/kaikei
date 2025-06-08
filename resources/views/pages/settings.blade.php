@@ -16,14 +16,18 @@
                 <!-- 設定メニュー -->
                 <section class="settings-menu-section">
                     <div class="settings-menu">
-                        <button class="settings-menu-item active" data-tab="categories">
-                            <i class="fas fa-tags"></i>
-                            <span>科目管理</span>
-                        </button>
-                        <button class="settings-menu-item" data-tab="export">
+                        <button class="settings-menu-item active" data-tab="export">
                             <i class="fas fa-file-export"></i>
                             <span>データエクスポート</span>
                         </button>
+                        <button class="settings-menu-item" data-tab="categories">
+                            <i class="fas fa-tags"></i>
+                            <span>科目管理</span>
+                        </button>
+                        {{-- <button class="settings-menu-item" data-tab="budgets">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>予算管理</span>
+                        </button> --}}
                         <button class="settings-menu-item" data-tab="profile">
                             <i class="fas fa-user"></i>
                             <span>プロフィール</span>
@@ -48,8 +52,80 @@
                     <!-- 科目管理タブ -->
                     @include('pages/settings/_settings_categories')
 
+                    <!-- 予算管理タブ -->
+                    <div class="settings-tab" id="budgets-tab" style="display: none;">
+                        <div class="settings-header">
+                            <h2>予算管理</h2>
+                            <p>月ごとの支出予算を設定して、お金の使いすぎを防止しましょう。</p>
+                        </div>
+
+                        <!-- 予算設定フォーム -->
+                        <div class="settings-section">
+                            <h3>新しい予算を設定</h3>
+                            <form action="{{ route('budgets.store') }}" method="POST" class="budget-form">
+                                @csrf
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="budget-year">年</label>
+                                        <select id="budget-year" name="year" required>
+                                            @for ($year = now()->year - 1; $year <= now()->year + 1; $year++)
+                                                <option value="{{ $year }}"
+                                                    {{ $year == now()->year ? 'selected' : '' }}>
+                                                    {{ $year }}年
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="budget-month">月</label>
+                                        <select id="budget-month" name="month" required>
+                                            @for ($month = 1; $month <= 12; $month++)
+                                                <option value="{{ $month }}"
+                                                    {{ $month == now()->month ? 'selected' : '' }}>
+                                                    {{ $month }}月
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="budget-category">科目</label>
+                                        <select id="budget-category" name="category_id" required>
+                                            <option value="">科目を選択</option>
+                                            @foreach ($category->where('default_type', 'expense') as $cat)
+                                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="budget-amount">予算金額</label>
+                                        <div class="amount-input-wrapper">
+                                            <span class="currency-symbol">¥</span>
+                                            <input type="number" id="budget-amount" name="amount" min="1"
+                                                step="1" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="primary-button">
+                                            <i class="fas fa-plus"></i>
+                                            予算を設定
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 現在の予算一覧 -->
+                        <div class="settings-section">
+                            <h3>現在の予算 ({{ now()->format('Y年n月') }})</h3>
+                            <div class="budget-list" id="current-budgets">
+                                <!-- 予算データはJavaScriptで動的に読み込み -->
+                                <div class="loading">予算データを読み込み中...</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- データエクスポートタブ -->
-                    <div class="settings-tab" id="export-tab">
+                    <div class="settings-tab active" id="export-tab">
                         <div class="settings-header">
                             <h2>データエクスポート</h2>
                         </div>
@@ -80,17 +156,19 @@
                                         </label>
                                     </div>
                                     <div class="format-option">
-                                        <input type="radio" id="formatExcel" name="exportFormat" value="excel">
+                                        <input type="radio" id="formatExcel" name="exportFormat" value="excel"
+                                            disabled>
                                         <label for="formatExcel">
                                             <i class="fas fa-file-excel"></i>
-                                            <span>Excel形式</span>
+                                            <span>Excel形式（現在開発中）</span>
                                         </label>
                                     </div>
                                     <div class="format-option">
-                                        <input type="radio" id="formatPDF" name="exportFormat" value="pdf">
+                                        <input type="radio" id="formatPDF" name="exportFormat" value="pdf"
+                                            disabled>
                                         <label for="formatPDF">
                                             <i class="fas fa-file-pdf"></i>
-                                            <span>PDF形式</span>
+                                            <span>PDF形式（現在開発中）</span>
                                         </label>
                                     </div>
                                 </div>
@@ -106,14 +184,15 @@
                                     </div>
                                     <div class="field-option">
                                         <input type="checkbox" id="fieldSummary" name="exportFields" value="summary"
-                                            checked>
-                                        <label for="fieldSummary">月次サマリー</label>
+                                            disabled>
+                                        <label for="fieldSummary" class="text-gray-400">月次サマリー（現在開発中）</label>
                                     </div>
                                     <div class="field-option">
                                         <input type="checkbox" id="fieldCategories" name="exportFields"
-                                            value="categories">
-                                        <label for="fieldCategories">科目設定</label>
+                                            value="categories" disabled>
+                                        <label for="fieldCategories" class="text-gray-400">科目設定（現在開発中）</label>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -325,7 +404,7 @@
                         <form class="form-actions" method="POST" id="categoryDeleteForm" action="/categories">
                             @csrf
                             @method('DELETE')
-                            <button class="secondary-button close-modal">
+                            <button type="button" class="secondary-button close-modal">
                                 キャンセル
                             </button>
                             <button class="danger-button" id="confirmDeleteCategoryBtn">
@@ -334,10 +413,11 @@
                         </form>
                     </div>
                 </div>
-
-
             </div>
         </div>
+
+        <!-- ナビゲーション -->
+        @include('layouts.navigation-bottom')
     </div>
     @push('scripts')
         @vite('resources/js/settings.js')
