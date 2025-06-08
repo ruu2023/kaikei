@@ -174,37 +174,16 @@ function showPaymentExpense() {
 /**
  * フォームの科目選択、相手方の設定
  */
-function initPaymentMethod() {
-  // 初期化
-  if ((document.getElementById("income").checked = true)) {
-    showPaymentIncome();
+function changePaymentMethod(categorySelect) {
+  const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+  const optgroupLabel = selectedOption.parentNode.label;
+  if (optgroupLabel === "収入") {
+    document.getElementById("income").checked = true;
+    document.getElementById("income").dispatchEvent(new Event("change"));
+  } else if (optgroupLabel === "支出") {
+    document.getElementById("expense").checked = true;
+    document.getElementById("expense").dispatchEvent(new Event("change"));
   }
-  if ((document.getElementById("expense").checked = true)) {
-    showPaymentExpense();
-  }
-
-  // 科目が変更されたときに収支区分を自動選択
-  const categorySelect = document.getElementById("transactionCategory");
-  categorySelect.addEventListener("change", function () {
-    const selectedOption = this.options[this.selectedIndex];
-    const optgroupLabel = selectedOption.parentNode.label;
-
-    if (optgroupLabel === "収入") {
-      document.getElementById("income").checked = true;
-      document.getElementById("income").dispatchEvent(new Event("change"));
-    } else if (optgroupLabel === "支出") {
-      document.getElementById("expense").checked = true;
-      document.getElementById("expense").dispatchEvent(new Event("change"));
-    }
-  });
-
-  // 相手方を変更
-  document.getElementById("income").addEventListener("change", () => {
-    showPaymentIncome();
-  });
-  document.getElementById("expense").addEventListener("change", () => {
-    showPaymentExpense();
-  });
 }
 
 function handleDelete(transactionId) {
@@ -228,6 +207,14 @@ function setupAnalyticsEventListeners() {
   // Filter button
   document.getElementById("filterBtn").addEventListener("click", function () {
     openModal("filterModal");
+  });
+
+  // 相手方を変更
+  document.getElementById("income").addEventListener("change", () => {
+    showPaymentIncome();
+  });
+  document.getElementById("expense").addEventListener("change", () => {
+    showPaymentExpense();
   });
 
   // Delete button
@@ -255,15 +242,23 @@ function setupAnalyticsEventListeners() {
       document.getElementById("transactionMemo").value =
         this.getAttribute("data-memo");
       document.getElementById(this.getAttribute("data-type")).checked = true;
-      document
-        .getElementById(this.getAttribute("data-type"))
-        .dispatchEvent(new Event("change"));
+      if (this.getAttribute("data-type") === "income") {
+        showPaymentIncome();
+      } else {
+        showPaymentExpense();
+      }
       const form = document.getElementById("transactionForm");
       form.action = `/transaction/${transactionId}`;
       document.getElementById("editTransactionId").value = transactionId;
       openModal("editTransactionModal");
-      initPaymentMethod();
     });
+  });
+
+  // 科目が変更されたときに収支区分を自動選択
+  const categorySelect = document.getElementById("transactionCategory");
+  categorySelect.addEventListener("change", function () {
+    console.log("ここ");
+    changePaymentMethod(categorySelect);
   });
 
   // Modal close buttons
