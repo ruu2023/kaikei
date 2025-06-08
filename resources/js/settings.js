@@ -1,5 +1,3 @@
-import "./bootstrap"; // bootstrap.js の中で axios を window に登録済み
-
 document.addEventListener("DOMContentLoaded", function () {
   const categoryObj = document
     .getElementById("category-list")
@@ -19,11 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedIconValue = "fas fa-coins";
 
   // 初期化
-  if (!window._settingsInitialized) {
-    window._settingsInitialized = true;
-    console.log("init");
-    initSettings();
-  }
+  initSettings();
 
   /**
    * 設定画面の初期化
@@ -37,9 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 科目データの描画
     renderCategories();
-
-    // 予算データの読み込み
-    loadBudgetData();
 
     // イベントリスナーの設定
     setupEventListeners();
@@ -65,11 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
           .querySelector(".settings-tab.active")
           .classList.remove("active");
         document.getElementById(tabId).classList.add("active");
-
-        // 予算タブが選択された場合、データを再読み込み
-        if (this.dataset.tab === "budgets") {
-          loadBudgetData();
-        }
       });
     });
   }
@@ -96,15 +82,11 @@ document.addEventListener("DOMContentLoaded", function () {
    * 科目データの描画
    */
   function renderCategories() {
-    if (categoryData.income) {
-      // 収入科目の描画
-      renderCategoryList("income", categoryData.income);
-    }
+    // 収入科目の描画
+    renderCategoryList("income", categoryData.income);
 
-    if (categoryData.expense) {
-      // 支出科目の描画
-      renderCategoryList("expense", categoryData.expense);
-    }
+    // 支出科目の描画
+    renderCategoryList("expense", categoryData.expense);
   }
 
   /**
@@ -305,186 +287,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /**
-   * 予算データの読み込み
-   */
-  function loadBudgetData() {
-    const currentBudgetsDiv = document.getElementById("current-budgets");
-
-    // APIから現在の予算データを取得
-    fetch("/budgets/data")
-      .then((response) => response.json())
-      .then((data) => {
-        renderBudgetList(data);
-      })
-      .catch((error) => {
-        console.error("Error loading budget data:", error);
-        currentBudgetsDiv.innerHTML =
-          '<div class="error">予算データの読み込みに失敗しました。</div>';
-      });
-  }
-
-  /**
-   * 予算リストの描画
-   */
-  function renderBudgetList(budgets) {
-    const currentBudgetsDiv = document.getElementById("current-budgets");
-
-    if (budgets.length === 0) {
-      currentBudgetsDiv.innerHTML =
-        '<div class="no-budgets">設定された予算がありません。</div>';
-      return;
-    }
-
-    let html = "";
-    budgets.forEach((budget) => {
-      const progressPercentage = Math.min(budget.progress_percentage, 100);
-      const warningClass = budget.warning_level;
-
-      html += `
-        <div class="budget-item ${warningClass}">
-          <div class="budget-info">
-            <div class="budget-category">${budget.category.name}</div>
-            <div class="budget-numbers">
-              ¥${budget.actual_spent.toLocaleString()} / ¥${budget.amount.toLocaleString()}
-            </div>
-            <div class="budget-actions">
-              <button class="icon-button edit-budget" data-id="${budget.id}">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="icon-button delete-budget" data-id="${budget.id}">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: ${progressPercentage}%"></div>
-          </div>
-          ${
-            budget.is_over_budget
-              ? `
-            <div class="budget-warning">
-              <small style="color: #dc3545;">
-                予算オーバー: ¥${(
-                  budget.actual_spent - budget.amount
-                ).toLocaleString()}
-              </small>
-            </div>
-          `
-              : ""
-          }
-        </div>
-      `;
-    });
-
-    currentBudgetsDiv.innerHTML = html;
-    attachBudgetActionListeners();
-  }
-
-  /**
-   * 予算アクションボタンのイベントリスナー追加
-   */
-  function attachBudgetActionListeners() {
-    // 編集ボタン
-    document.querySelectorAll(".edit-budget").forEach((button) => {
-      button.addEventListener("click", function () {
-        const budgetId = this.dataset.id;
-        editBudget(budgetId);
-      });
-    });
-
-    // 削除ボタン
-    document.querySelectorAll(".delete-budget").forEach((button) => {
-      button.addEventListener("click", function () {
-        const budgetId = this.dataset.id;
-        deleteBudget(budgetId);
-      });
-    });
-  }
-
-  /**
-   * 予算の編集
-   */
-  function editBudget(budgetId) {
-    // 実装は省略（モーダル表示など）
-    console.log("Edit budget:", budgetId);
-  }
-
-  /**
-   * 予算の削除
-   */
-  function deleteBudget(budgetId) {
-    if (confirm("この予算を削除してもよろしいですか？")) {
-      fetch(`/budgets/${budgetId}`, {
-        method: "DELETE",
-        headers: {
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-            .content,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            loadBudgetData(); // 予算データを再読み込み
-          } else {
-            alert("予算の削除に失敗しました。");
-          }
-        })
-        .catch((error) => {
-          console.error("Error deleting budget:", error);
-          alert("予算の削除に失敗しました。");
-        });
-    }
-  }
-
-  /**
    * CSVエクスポート機能
    */
-  async function exportData() {
+  function exportData() {
     const startDate = document.getElementById("exportStartDate").value;
     const endDate = document.getElementById("exportEndDate").value;
     const format = document.querySelector(
       'input[name="exportFormat"]:checked'
     ).value;
-
-    // データベースから取引情報を取得する
-    let transactionArray = [];
-    try {
-      const response = await axios.post("/data-export", {
-        startDate,
-        endDate,
-      });
-      transactionArray = response.data;
-    } catch (error) {
-      console.log(error, "だめっぽい");
-      transactionArray = [];
-    }
-
-    // CSVヘッダーとサンプルデータの作成
-    let csvContent = "取引日,科目,相手方,取引元,収支区分,金額,メモ\n";
-
-    // csv形式にデーターベースのレコードを加工する
-    transactionArray.forEach((item) => {
-      const type = item.type == "expense" ? "支出" : "収入";
-      csvContent += `${item.date},${item.category.name},${item.payment_method.name},${item.client_name},${type},${item.amount},${item.memo}\n`;
-    });
-
-    // {
-    //     "id": 1,
-    //     "date": "2025-06-08",
-    //     "amount": 500,
-    //     "type": "expense",
-    //     "memo": null,
-    //     "category_id": 17,
-    //     "user_id": 7,
-    //     "payment_method_id": 12,
-    //     "client_id": null,
-    //     "created_at": "2025-06-08T02:54:59.000000Z",
-    //     "updated_at": "2025-06-08T02:54:59.000000Z",
-    //     "client_name": "あああ"
-    // }
-
-    console.log(csvContent);
 
     // 選択されたエクスポート項目の取得
     const selectedFields = [];
@@ -493,6 +303,25 @@ document.addEventListener("DOMContentLoaded", function () {
       .forEach((field) => {
         selectedFields.push(field.value);
       });
+
+    // 実際のアプリではAPIやローカルストレージからデータを取得してCSV生成
+    // ここではデモとして疑似的なCSVをダウンロード
+
+    // CSVヘッダーとサンプルデータの作成
+    let csvContent = "取引日,科目,取引元,収支区分,金額,メモ\n";
+    csvContent +=
+      "2025-04-05,売上,クライアントA,収入,480000,4月分サービス利用料\n";
+    csvContent +=
+      "2025-04-12,コンサルティング,クライアントB,収入,250000,コンサルティング料金\n";
+    csvContent += "2025-04-20,利息,銀行,収入,5000,普通預金利息\n";
+    csvContent +=
+      "2025-04-25,売上,クライアントC,収入,215000,プロジェクト完了報酬\n";
+    csvContent += "2025-04-02,オフィス経費,オフィスデポ,支出,12500,事務用品\n";
+    csvContent += "2025-04-03,給与,スタッフA,支出,350000,給与\n";
+    csvContent += "2025-04-05,賃料,オフィスビル,支出,85000,オフィス賃料\n";
+    csvContent += "2025-04-12,光熱費,電力会社,支出,23500,電気代\n";
+    csvContent += "2025-04-15,交通費,交通系,支出,15800,交通費精算\n";
+    csvContent += "2025-04-18,飲食費,レストラン,支出,8600,取引先ランチ\n";
 
     // CSVファイルのダウンロード
     const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
@@ -550,38 +379,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document
       .getElementById("confirmDeleteCategoryBtn")
       .addEventListener("click", deleteCategory);
-
-    // 予算フォーム送信
-    document
-      .querySelector(".budget-form")
-      .addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch("/budgets", {
-          method: "POST",
-          headers: {
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-              .content,
-          },
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              this.reset(); // フォームをリセット
-              loadBudgetData(); // 予算データを再読み込み
-              alert("予算を設定しました。");
-            } else {
-              alert(data.message || "予算の設定に失敗しました。");
-            }
-          })
-          .catch((error) => {
-            console.error("Error creating budget:", error);
-            alert("予算の設定に失敗しました。");
-          });
-      });
 
     // アイコンオプション選択
     document.querySelectorAll(".icon-option").forEach((option) => {

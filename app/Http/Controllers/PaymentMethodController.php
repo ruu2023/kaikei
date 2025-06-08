@@ -34,7 +34,7 @@ class PaymentMethodController extends Controller
             'type' => 'required|in:income,expense'
         ]);
 
-        $validated['user_id'] = Auth::id();
+        $validate['user_id'] = Auth::id();
 
         $paymentMethod = PaymentMethod::create($validated);
 
