@@ -16,11 +16,13 @@
                 <!-- 設定メニュー -->
                 <section class="settings-menu-section">
                     <div class="settings-menu">
-                        <button class="settings-menu-item active" data-tab="export">
+                        <button class="settings-menu-item @if ($page !== 'category') active @endif"
+                            data-tab="export">
                             <i class="fas fa-file-export"></i>
                             <span>データエクスポート</span>
                         </button>
-                        <button class="settings-menu-item" data-tab="categories">
+                        <button class="settings-menu-item @if ($page === 'category') active @endif"
+                            data-tab="categories">
                             <i class="fas fa-tags"></i>
                             <span>科目管理</span>
                         </button>
@@ -49,9 +51,6 @@
 
                 <!-- タブコンテンツ -->
                 <section class="settings-content">
-                    <!-- 科目管理タブ -->
-                    @include('pages/settings/_settings_categories')
-
                     <!-- 予算管理タブ -->
                     <div class="settings-tab" id="budgets-tab" style="display: none;">
                         <div class="settings-header">
@@ -125,7 +124,7 @@
                     </div>
 
                     <!-- データエクスポートタブ -->
-                    <div class="settings-tab active" id="export-tab">
+                    <div class="settings-tab @if ($page !== 'category') active @endif" id="export-tab">
                         <div class="settings-header">
                             <h2>データエクスポート</h2>
                         </div>
@@ -201,6 +200,13 @@
                             </button>
                         </div>
                     </div>
+
+
+                    <!-- 科目管理タブ -->
+                    <div class="settings-tab @if ($page === 'category') active @endif" id="categories-tab">
+                        @include('pages/settings/_settings_categories')
+                    </div>
+
 
                     <!-- その他のタブ (実装しない) -->
                     <div class="settings-tab" id="profile-tab">
