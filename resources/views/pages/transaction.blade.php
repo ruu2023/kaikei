@@ -33,18 +33,23 @@
                         <div class="form-group">
                             <label for="transactionCategory">科目</label>
                             <select id="transactionCategory" name="category_id" required>
-                                <option value="" disabled selected>科目を選択してください</option>
+                                <option value="" disabled @if (empty($type)) selected @endif>
+                                    科目を選択してください</option>
                                 <optgroup label="収入">
                                     @foreach ($category as $item)
                                         @if ($item->default_type === 'income')
-                                            <option value={{ $item->id }}>{{ $item->name }}</option>
+                                            <option value={{ $item->id }}
+                                                @if ($loop->first && $type === 'income') selected @endif>{{ $item->name }}
+                                            </option>
                                         @endif
                                     @endforeach
                                 </optgroup>
                                 <optgroup label="支出">
                                     @foreach ($category as $item)
                                         @if ($item->default_type === 'expense')
-                                            <option value={{ $item->id }}>{{ $item->name }}</option>
+                                            <option value={{ $item->id }}
+                                                @if ($loop->first && $type === 'expense') selected @endif>{{ $item->name }}
+                                            </option>
                                         @endif
                                     @endforeach
                                 </optgroup>
@@ -54,9 +59,11 @@
                         <div class="form-group">
                             <label for="transactionType">収支区分</label>
                             <div class="transaction-type-toggle">
-                                <input type="radio" id="income" name="type" value="income" required />
+                                <input type="radio" id="income" name="type" value="income" required
+                                    @checked($type === 'income') />
                                 <label for="income" class="toggle-label income">収入</label>
-                                <input type="radio" id="expense" name="type" value="expense" required />
+                                <input type="radio" id="expense" name="type" value="expense" required
+                                    @checked($type === 'expense') />
                                 <label for="expense" class="toggle-label expense">支出</label>
                             </div>
                         </div>
@@ -104,24 +111,7 @@
                 </section>
 
                 <!-- ナビゲーション -->
-                <nav class="bottom-nav">
-                    <a href="index.html" class="nav-item">
-                        <i class="fas fa-home"></i>
-                        <span>ホーム</span>
-                    </a>
-                    <a href="#" class="nav-item active">
-                        <i class="fas fa-exchange-alt"></i>
-                        <span>取引</span>
-                    </a>
-                    <a href="analytics.html" class="nav-item">
-                        <i class="fas fa-chart-line"></i>
-                        <span>分析</span>
-                    </a>
-                    <a href="settings.html" class="nav-item">
-                        <i class="fas fa-cog"></i>
-                        <span>設定</span>
-                    </a>
-                </nav>
+                @include('layouts.navigation-bottom')
             </div>
         </div>
     </div>
