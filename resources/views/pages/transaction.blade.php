@@ -75,14 +75,16 @@
                                 <option value="" class="paymentMethod" disabled selected>相手方を選択してください</option>
                                 @foreach ($paymentMethod as $item)
                                     @if ($item->type === 'income')
-                                        <option class="paymentMethodIncome" style="display:none;"
+                                        <option class="paymentMethodIncome"
+                                            style="@if ($type !== 'income') display: none; @endif"
                                             value={{ $item->id }}>
                                             {{ $item->name }}</option>
                                     @endif
                                 @endforeach
                                 @foreach ($paymentMethod as $item)
                                     @if ($item->type === 'expense')
-                                        <option class="paymentMethodExpense" style="display:none;"
+                                        <option class="paymentMethodExpense"
+                                            style="@if ($type !== 'expense') display: none; @endif"
                                             value={{ $item->id }}>
                                             {{ $item->name }}</option>
                                     @endif
