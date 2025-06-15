@@ -355,6 +355,49 @@
             color: #3a7bd5;
         }
 
+        /* Profile Modal Styles */
+        .profile-action-container {
+            position: relative;
+        }
+
+        .profile-modal {
+            display: none;
+            position: absolute;
+            top: calc(100% + 5px);
+            /* Position below the button with a small gap */
+            right: 0;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 110;
+            /* Higher than header */
+            min-width: 150px;
+            padding: 0.5rem 0;
+            border: 1px solid #eee;
+        }
+
+        .profile-modal.show {
+            display: block;
+        }
+
+        .profile-modal-item {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            background: none;
+            border: none;
+            color: #333;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            /* For the form button to look like a link/item */
+        }
+
+        .profile-modal-item:hover {
+            background-color: #f5f5f5;
+        }
+
         @media (min-width: 768px) {
             .app-container {
                 max-width: 480px;
@@ -378,9 +421,17 @@
                 <button class="icon-button" id="notificationBtn">
                     <i class="fas fa-bell"></i>
                 </button>
-                <button class="icon-button" id="profileBtn">
-                    <i class="fas fa-user-circle"></i>
-                </button>
+                <div class="profile-action-container">
+                    <button class="icon-button" id="profileBtn">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    <div class="profile-modal" id="profileModal">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="profile-modal-item">ログアウト</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -475,7 +526,7 @@
         </section>
 
         <!-- 予算進捗 -->
-        <section class="budget-section">
+        {{-- <section class="budget-section">
             <div class="section-header">
                 <h2>予算進捗</h2>
                 <span class="period">{{ now()->format('n月') }}</span>
@@ -511,7 +562,7 @@
                     </div>
                 @endforelse
             </div>
-        </section>
+        </section> --}}
 
         <!-- ナビゲーション -->
         @include('layouts.navigation-bottom')
@@ -567,5 +618,24 @@
             // Update chart data based on selected period
             console.log('Period changed to:', this.value);
         });
+
+        // Profile modal toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileModal = document.getElementById('profileModal');
+
+        if (profileBtn && profileModal) {
+            profileBtn.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent click from bubbling to document
+                profileModal.classList.toggle('show');
+            });
+
+            // Close modal if clicked outside
+            document.addEventListener('click', function(event) {
+                if (profileModal.classList.contains('show') && !profileBtn.contains(event.target) && !profileModal
+                    .contains(event.target)) {
+                    profileModal.classList.remove('show');
+                }
+            });
+        }
     </script>
 </x-app-layout>
