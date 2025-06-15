@@ -222,7 +222,8 @@ class AppController extends Controller
     public function settings(Request $request)
     {
         $category = Category::all();
+        $paymentMethods = PaymentMethod::where('user_id', Auth::id())->get();
         $page = $request->query("page");
-        return view('pages.settings', compact('category', 'page'));
+        return view('pages.settings', compact('category', 'page', 'paymentMethods'));
     }
 }

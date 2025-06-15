@@ -23,8 +23,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
 
     // paymentMethod
-    Route::post('payment-methods', [PaymentMethodController::class, 'store']);
-    Route::delete('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'destroy']);
+    // Route::post('payment-methods', [PaymentMethodController::class, 'store']);
+    // Route::patch('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'update']);
+    // Route::delete('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'destroy']);
+    Route::resource('payment-methods', PaymentMethodController::class)->only(['store', 'update', 'destroy']);
+
 
     // client
     Route::post('clients', [ClientController::class, 'store']);

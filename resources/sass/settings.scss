@@ -632,7 +632,8 @@
     margin-top: 0.5rem;
 }
 
-.no-budgets, .error {
+.no-budgets,
+.error {
     text-align: center;
     padding: 2rem;
     color: #888;
@@ -656,6 +657,25 @@
     margin: 0 0 1rem 0;
     color: #333;
     font-weight: 600;
+}
+
+/* 例: resources/css/app.css や public/css/style.css など */
+.action-btn.edit-btn {
+    background-color: #3490dc; /* 青系の背景色 */
+    color: white;
+}
+
+.action-btn.edit-btn:hover {
+    background-color: #2779bd;
+}
+
+.action-btn.danger-btn {
+    background-color: #e3342f; /* 赤系の背景色 */
+    color: white;
+}
+
+.action-btn.danger-btn:hover {
+    background-color: #cc1f1a;
 }
 
 @media (max-width: 480px) {

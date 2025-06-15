@@ -6,9 +6,9 @@
         <header class="header">
             <h1>取引分析</h1>
             <div class="header-actions">
-                <button class="icon-button" id="filterBtn">
+                {{-- <button class="icon-button" id="filterBtn">
                     <i class="fas fa-filter"></i>
-                </button>
+                </button> --}}
             </div>
         </header>
 

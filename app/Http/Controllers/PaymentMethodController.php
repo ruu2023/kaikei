@@ -63,7 +63,14 @@ class PaymentMethodController extends Controller
      */
     public function update(Request $request, PaymentMethod $paymentMethod)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:income,expense'
+        ]);
+
+        $paymentMethod->update($validated);
+
+        return back()->with('success', '支払方法を更新しました。');
     }
 
     /**
