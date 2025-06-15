@@ -483,11 +483,11 @@
         <section class="chart-section">
             <div class="section-header">
                 <h2>収支概要</h2>
-                <select id="chartPeriod">
+                {{-- <select id="chartPeriod">
                     <option value="week">週間</option>
                     <option value="month" selected>月間</option>
                     <option value="year">年間</option>
-                </select>
+                </select> --}}
             </div>
             <div class="chart-container">
                 <canvas id="incomeExpenseChart"></canvas>

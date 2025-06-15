@@ -16,7 +16,7 @@
                 <!-- 設定メニュー -->
                 <section class="settings-menu-section">
                     <div class="settings-menu">
-                        <button class="settings-menu-item @if ($page !== 'category') active @endif"
+                        <button class="settings-menu-item @if ($page !== 'category' && $page !== 'payment_method') active @endif"
                             data-tab="export">
                             <i class="fas fa-file-export"></i>
                             <span>データエクスポート</span>
@@ -26,10 +26,11 @@
                             <i class="fas fa-tags"></i>
                             <span>科目管理</span>
                         </button>
-                        {{-- <button class="settings-menu-item" data-tab="budgets">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>予算管理</span>
-                        </button> --}}
+                        <button class="settings-menu-item @if ($page === 'payment_method') active @endif"
+                            data-tab="payment-methods">
+                            <i class="fas fa-credit-card"></i>
+                            <span>相手方管理</span>
+                        </button>
                         <button class="settings-menu-item" data-tab="profile">
                             <i class="fas fa-user"></i>
                             <span>プロフィール</span>
@@ -124,7 +125,7 @@
                     </div>
 
                     <!-- データエクスポートタブ -->
-                    <div class="settings-tab @if ($page !== 'category') active @endif" id="export-tab">
+                    <div class="settings-tab @if ($page !== 'category' && $page !== 'payment_method') active @endif" id="export-tab">
                         <div class="settings-header">
                             <h2>データエクスポート</h2>
                         </div>
@@ -205,6 +206,12 @@
                     <!-- 科目管理タブ -->
                     <div class="settings-tab @if ($page === 'category') active @endif" id="categories-tab">
                         @include('pages/settings/_settings_categories')
+                    </div>
+
+                    <!-- 相手方管理タブ -->
+                    <div class="settings-tab @if ($page === 'payment_method') active @endif"
+                        id="payment-methods-tab">
+                        @include('pages/settings/_settings_payment_methods')
                     </div>
 
 
