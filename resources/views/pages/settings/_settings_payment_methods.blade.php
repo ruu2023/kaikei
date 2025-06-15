@@ -54,13 +54,13 @@
                                     </select>
                                     <button type="submit" class="action-btn edit-btn">更新</button>
                                 </form>
-                                <form style="display: flex; align-items: center; flex: 1;" method="POST"
+                                {{-- <form style="display: flex; align-items: center; flex: 1;" method="POST"
                                     id="paymentMethodDeleteForm_{{ $pm->id }}"
                                     action="{{ route('payment-methods.destroy', $pm->id) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="action-btn danger-btn">削除</button>
-                                </form>
+                                </form> --}}
                             </li>
                         @endforeach
                         @if (!$incomeMethodsFound)
@@ -94,13 +94,13 @@
                                     </select>
                                     <button type="submit" class="action-btn edit-btn">更新</button>
                                 </form>
-                                <form style="display: flex; align-items: center; flex: 1;" method="POST"
+                                {{-- <form style="display: flex; align-items: center; flex: 1;" method="POST"
                                     id="paymentMethodDeleteForm_{{ $pm->id }}"
                                     action="{{ route('payment-methods.destroy', $pm->id) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="action-btn danger-btn">削除</button>
-                                </form>
+                                </form> --}}
                             </li>
                         @endforeach
                         @if (!$expenseMethodsFound)
