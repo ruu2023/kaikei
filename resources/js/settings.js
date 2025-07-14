@@ -456,52 +456,80 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       transactionArray = response.data;
     } catch (error) {
-      console.log(error, "だめっぽい");
+      console.error("データのエクスポートに失敗しました。", error);
       transactionArray = [];
+      alert("データのエクスポートに失敗しました。");
+      return; // エラー時は処理を中断
     }
 
-    // CSVヘッダーとサンプルデータの作成
-    let csvContent = "取引日,科目,相手方,取引元,収支区分,金額,メモ\n";
+    if (format === "csv") {
+      // --- CSVエクスポート処理 ---
+      // BOMを追加してExcelでの文字化けを防ぐ
+      let csvContent =
+        "\uFEFF" + "取引日,科目,相手方,取引元,収支区分,金額,メモ\n";
 
-    // csv形式にデーターベースのレコードを加工する
-    transactionArray.forEach((item) => {
-      const type = item.type == "expense" ? "支出" : "収入";
-      csvContent += `${item.date},${item.category.name},${item.payment_method.name},${item.client_name},${type},${item.amount},${item.memo}\n`;
-    });
-
-    // {
-    //     "id": 1,
-    //     "date": "2025-06-08",
-    //     "amount": 500,
-    //     "type": "expense",
-    //     "memo": null,
-    //     "category_id": 17,
-    //     "user_id": 7,
-    //     "payment_method_id": 12,
-    //     "client_id": null,
-    //     "created_at": "2025-06-08T02:54:59.000000Z",
-    //     "updated_at": "2025-06-08T02:54:59.000000Z",
-    //     "client_name": "あああ"
-    // }
-
-    console.log(csvContent);
-
-    // 選択されたエクスポート項目の取得
-    const selectedFields = [];
-    document
-      .querySelectorAll('input[name="exportFields"]:checked')
-      .forEach((field) => {
-        selectedFields.push(field.value);
+      transactionArray.forEach((item) => {
+        const type = item.type === "expense" ? "支出" : "収入";
+        const date = item.date || "";
+        const categoryName = item.category ? item.category.name : "";
+        const paymentMethodName = item.payment_method
+          ? item.payment_method.name
+          : "";
+        const clientName = item.client_name || "";
+        const amount = item.amount || 0;
+        const memo = item.memo || "";
+        csvContent += `${date},${categoryName},${paymentMethodName},${clientName},${type},${amount},${memo}\n`;
       });
 
-    // CSVファイルのダウンロード
-    const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `取引データ_${startDate}_${endDate}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `取引データ_${startDate}_${endDate}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else if (format === "excel") {
+      // --- Excelエクスポート処理 (SheetJSを使用) ---
+      // 1. データをSheetJSが要求する形式に整形
+      const dataForSheet = transactionArray.map((item) => ({
+        取引日: item.date || "",
+        科目: item.category ? item.category.name : "",
+        相手方: item.payment_method ? item.payment_method.name : "",
+        取引元: item.client_name || "",
+        収支区分: item.type === "expense" ? "支出" : "収入",
+        金額: item.amount || 0,
+        メモ: item.memo || "",
+      }));
+
+      // 2. ワークシートを作成
+      const worksheet = XLSX.utils.json_to_sheet(dataForSheet);
+
+      // 3. 列幅を自動調整
+      const colWidths = Object.keys(dataForSheet[0] || {}).map((key) => {
+        const maxLength = Math.max(
+          key.length * 2, // ヘッダーの長さ (日本語は2文字分)
+          ...dataForSheet.map((row) => {
+            const value = row[key];
+            // 値の長さを計算 (日本語を2文字としてカウント)
+            return value
+              ? String(value).replace(/[^\x00-\xff]/g, "aa").length
+              : 0;
+          })
+        );
+        return { wch: maxLength + 2 }; // 少し余白を追加
+      });
+      worksheet["!cols"] = colWidths;
+
+      // 4. ワークブックを作成し、ワークシートを追加
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "取引データ");
+
+      // 5. ファイルをダウンロード
+      const fileName = `取引データ_${startDate}_${endDate}.xlsx`;
+      XLSX.writeFile(workbook, fileName);
+    }
 
     // 成功メッセージ
     alert("データをエクスポートしました");
