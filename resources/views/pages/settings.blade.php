@@ -156,11 +156,10 @@
                                         </label>
                                     </div>
                                     <div class="format-option">
-                                        <input type="radio" id="formatExcel" name="exportFormat" value="excel"
-                                            disabled>
+                                        <input type="radio" id="formatExcel" name="exportFormat" value="excel">
                                         <label for="formatExcel">
                                             <i class="fas fa-file-excel"></i>
-                                            <span>Excel形式（現在開発中）</span>
+                                            <span>Excel形式</span>
                                         </label>
                                     </div>
                                     <div class="format-option">
@@ -433,6 +432,7 @@
         @include('layouts.navigation-bottom')
     </div>
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
         @vite('resources/js/settings.js')
     @endpush
 </x-app-layout>
