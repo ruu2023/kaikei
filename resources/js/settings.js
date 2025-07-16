@@ -446,6 +446,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const format = document.querySelector(
       'input[name="exportFormat"]:checked'
     ).value;
+    const exportFields = document.querySelector(
+      'input[name="exportFields"]:checked'
+    ).value;
 
     // データベースから取引情報を取得する
     let transactionArray = [];
@@ -492,17 +495,42 @@ document.addEventListener("DOMContentLoaded", function () {
       URL.revokeObjectURL(url);
     } else if (format === "excel") {
       // --- Excelエクスポート処理 (SheetJSを使用) ---
-      // 1. データをSheetJSが要求する形式に整形
-      const dataForSheet = transactionArray.map((item) => ({
-        取引日: item.date || "",
-        科目: item.category ? item.category.name : "",
-        相手方: item.payment_method ? item.payment_method.name : "",
-        取引元: item.client_name || "",
-        収支区分: item.type === "expense" ? "支出" : "収入",
-        金額: item.amount || 0,
-        メモ: item.memo || "",
-      }));
 
+      // 1. データをSheetJSが要求する形式に整形
+      let dataForSheet = [];
+      if (exportFields === "transactions") {
+        dataForSheet = transactionArray.map((item) => ({
+          取引日: item.date || "",
+          科目: item.category ? item.category.name : "",
+          相手方: item.payment_method ? item.payment_method.name : "",
+          取引元: item.client_name || "",
+          収支区分: item.type === "expense" ? "支出" : "収入",
+          金額: item.amount || 0,
+          メモ: item.memo || "",
+        }));
+      } else if (exportFields === "summary") {
+        dataForSheet = transactionArray.map((item) => {
+          const isExpense = item.type === "expense";
+          const subject = item.category ? item.category.name : ""; // 科目
+          const counterparty = item.payment_method
+            ? item.payment_method.name
+            : ""; // 相手方
+          const description = item.memo
+            ? item.client_name + " : " + item.memo
+            : item.client_name;
+
+          return {
+            取引日: item.date || "",
+            // 収支区分に応じて借方と貸方を振り分け
+            借方: isExpense ? subject : counterparty,
+            借方金額: item.amount || 0,
+            貸方: isExpense ? counterparty : subject,
+            貸方金額: item.amount || 0,
+            // 「メモ」を「摘要」に変更
+            摘要: description || "",
+          };
+        });
+      }
       // 2. ワークシートを作成
       const worksheet = XLSX.utils.json_to_sheet(dataForSheet);
 

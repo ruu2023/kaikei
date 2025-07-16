@@ -205,9 +205,9 @@ function handleDelete(transactionId) {
  */
 function setupAnalyticsEventListeners() {
   // Filter button
-  document.getElementById("filterBtn").addEventListener("click", function () {
-    openModal("filterModal");
-  });
+  // document.getElementById("filterBtn").addEventListener("click", function () {
+  //   openModal("filterModal");
+  // });
 
   // 相手方を変更
   document.getElementById("income").addEventListener("change", () => {

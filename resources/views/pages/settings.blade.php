@@ -149,14 +149,16 @@
                                 <h3>エクスポート形式</h3>
                                 <div class="export-formats">
                                     <div class="format-option">
-                                        <input type="radio" id="formatCSV" name="exportFormat" value="csv" checked>
+                                        <input type="radio" id="formatCSV" name="exportFormat" value="csv"
+                                            disabled>
                                         <label for="formatCSV">
                                             <i class="fas fa-file-csv"></i>
                                             <span>CSV形式</span>
                                         </label>
                                     </div>
                                     <div class="format-option">
-                                        <input type="radio" id="formatExcel" name="exportFormat" value="excel">
+                                        <input type="radio" id="formatExcel" name="exportFormat" value="excel"
+                                            checked>
                                         <label for="formatExcel">
                                             <i class="fas fa-file-excel"></i>
                                             <span>Excel形式</span>
@@ -177,17 +179,16 @@
                                 <h3>エクスポート項目</h3>
                                 <div class="export-fields">
                                     <div class="field-option">
-                                        <input type="checkbox" id="fieldTransaction" name="exportFields"
+                                        <input type="radio" id="fieldTransaction" name="exportFields"
                                             value="transactions" checked>
                                         <label for="fieldTransaction">取引データ</label>
                                     </div>
                                     <div class="field-option">
-                                        <input type="checkbox" id="fieldSummary" name="exportFields" value="summary"
-                                            disabled>
-                                        <label for="fieldSummary" class="text-gray-400">月次サマリー（現在開発中）</label>
+                                        <input type="radio" id="fieldSummary" name="exportFields" value="summary">
+                                        <label for="fieldSummary">仕訳帳</label>
                                     </div>
                                     <div class="field-option">
-                                        <input type="checkbox" id="fieldCategories" name="exportFields"
+                                        <input type="radio" id="fieldCategories" name="exportFields"
                                             value="categories" disabled>
                                         <label for="fieldCategories" class="text-gray-400">科目設定（現在開発中）</label>
                                     </div>
