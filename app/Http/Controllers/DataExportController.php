@@ -12,7 +12,12 @@ class DataExportController extends Controller
     public function fetchData(Request $request) {
         $startDate = $request->input("startDate");
         $endDate = $request->input("endDate");
-        $transactions = Transaction::with('category', 'paymentMethod')->where('user_id', Auth::id())->whereBetween('date', [$startDate, $endDate])->get()->toArray();
+        $transactions = Transaction::with('category', 'paymentMethod')
+            ->where('user_id', Auth::id())
+            ->whereBetween('date', [$startDate, $endDate])
+            ->orderBy('date', 'asc')
+            ->get()
+            ->toArray();
         Log::debug(($transactions));
         return response()->json($transactions,201);
     }
