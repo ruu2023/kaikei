@@ -552,10 +552,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // 4. ワークブックを作成し、ワークシートを追加
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "取引データ");
+      const dataName =
+        exportFields === "transactions" ? "取引データ" : "仕分帳";
+      XLSX.utils.book_append_sheet(workbook, worksheet, dataName);
 
       // 5. ファイルをダウンロード
-      const fileName = `取引データ_${startDate}_${endDate}.xlsx`;
+      const fileName = `${dataName}_${startDate}_${endDate}.xlsx`;
       XLSX.writeFile(workbook, fileName);
     }
 

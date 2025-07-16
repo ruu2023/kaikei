@@ -153,7 +153,7 @@
                                             disabled>
                                         <label for="formatCSV">
                                             <i class="fas fa-file-csv"></i>
-                                            <span>CSV形式</span>
+                                            <span>CSV形式（現在開発中）</span>
                                         </label>
                                     </div>
                                     <div class="format-option">
