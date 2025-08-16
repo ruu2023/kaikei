@@ -1,67 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 会計管理ダッシュボード
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+個人事業主向けの会計管理アプリケーションです。日々の取引を記録し、収支を可視化することで、確定申告の準備をサポートします。
 
-## About Laravel
+## 主な機能
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **ダッシュボード**: 月次の収支サマリー、前月比較、収支グラフなどを表示します。
+- **取引管理**: 収入・支出の取引を登録、編集、削除できます。
+- **科目管理**: 勘定科目を自由にカスタマイズできます。
+- **分析機能**: 期間や科目でフィルタリングし、収支をグラフで分析できます。
+- **データエクスポート**: 取引データをCSV形式で出力でき、仕訳帳として利用可能です。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 使用技術
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### バックエンド
+- PHP 8.2
+- Laravel 11
+- SQLite
 
-## Learning Laravel
+### フロントエンド
+- Vite
+- Tailwind CSS
+- Alpine.js
+- Chart.js
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 環境構築手順
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. **リポジトリをクローン**
+   ```bash
+   git clone https://github.com/m-shiraishi/kaikei.git
+   cd kaikei
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **依存関係をインストール**
+   ```bash
+   composer install
+   npm install
+   ```
 
-## Laravel Sponsors
+3. **環境ファイルの設定**
+   `.env.example` ファイルをコピーして `.env` ファイルを作成します。
+   ```bash
+   cp .env.example .env
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. **アプリケーションキーの生成**
+   ```bash
+   php artisan key:generate
+   ```
 
-### Premium Partners
+5. **データベースの準備**
+   SQLiteデータベースファイルを作成し、マイグレーションとシーディングを実行します。
+   ```bash
+   touch database/database.sqlite
+   php artisan migrate --seed
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+6. **フロントエンドアセットのビルド**
+   ```bash
+   npm run build
+   ```
 
-## Contributing
+## アプリケーションの実行
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+以下のいずれかのコマンドで開発サーバーを起動します。
 
-## Code of Conduct
+- **PHPのビルトインサーバーで起動**
+  ```bash
+  php artisan serve
+  ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Viteと同時に起動（推奨）**
+  `composer.json` の `dev` スクリプトを使用すると、PHPサーバー、Vite、キューリスナーなどが同時に起動し便利です。
+  ```bash
+  composer run dev
+  ```
 
-## Security Vulnerabilities
+アプリケーションは `http://127.0.0.1:8000` で利用可能になります。
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## テストの実行
 
-## License
+以下のコマンドでPHPUnitのテストスイートを実行します。
+```bash
+php artisan test
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# kaikei
+## ライセンス
+
+このプロジェクトは [MITライセンス](https://opensource.org/licenses/MIT) の下で公開されています。
